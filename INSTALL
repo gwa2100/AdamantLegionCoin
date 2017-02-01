@@ -1,0 +1,9 @@
+Building Adamantlegioncoin
+
+See doc/readme-qt.rst for instructions on building Adamantlegioncoin-Qt,
+the intended-for-end-users, nice-graphical-interface, reference
+implementation of Adamantlegioncoin.
+
+See doc/build-*.txt for instructions on building adamantlegioncoind,
+the intended-for-services, no-graphical-interface, reference
+implementation of Adamantlegioncoin.
