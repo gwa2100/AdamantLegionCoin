@@ -1,15 +1,22 @@
 // Copyright (c) 2012 The Bitcoin developers
+// Copyright (c) 2012 Litecoin Developers
+// Copyright (c) 2013 GoldCoin (GLD) Developers
 // Distributed under the MIT/X11 software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 #ifndef BITCOIN_VERSION_H
 #define BITCOIN_VERSION_H
 
-#include "clientversion.h"
 #include <string>
 
 //
 // client versioning
 //
+
+// These need to be macro's, as version.cpp's voodoo requires it
+#define CLIENT_VERSION_MAJOR       0
+#define CLIENT_VERSION_MINOR       7
+#define CLIENT_VERSION_REVISION    2
+#define CLIENT_VERSION_BUILD       1
 
 static const int CLIENT_VERSION =
                            1000000 * CLIENT_VERSION_MAJOR
@@ -25,13 +32,11 @@ extern const std::string CLIENT_DATE;
 // network protocol versioning
 //
 
-static const int PROTOCOL_VERSION = 70002;
+static const int PROTOCOL_VERSION = 60018;
 
-// intial proto version, to be increased after version/verack negotiation
-static const int INIT_PROTO_VERSION = 209;
-
-// disconnect from peers older than this proto version
-static const int MIN_PEER_PROTO_VERSION = 70002;
+static const int MIN_PROTO_VERSION = 60017;
+// earlier versions not supported as of October 2013, and are disconnected
+// 60004 deprecates in a week! make sure to upgrade to 7.1.1 before then.
 
 // nTime field added to CAddress, starting with this version;
 // if possible, avoid requesting addresses nodes older than this
@@ -43,8 +48,5 @@ static const int NOBLKS_VERSION_END = 32400;
 
 // BIP 0031, pong message, is enabled for all versions AFTER this one
 static const int BIP0031_VERSION = 60000;
-
-// "mempool" command, enhanced "getdata" behavior starts with this version:
-static const int MEMPOOL_GD_VERSION = 60002;
 
 #endif

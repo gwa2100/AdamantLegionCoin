@@ -1,7 +1,3 @@
-// Copyright (c) 2011-2013 The Bitcoin developers
-// Distributed under the MIT/X11 software license, see the accompanying
-// file COPYING or http://www.opensource.org/licenses/mit-license.php.
-
 #include "bitcoinunits.h"
 
 #include <QStringList>
@@ -38,9 +34,9 @@ QString BitcoinUnits::name(int unit)
 {
     switch(unit)
     {
-    case BTC: return QString("ALC");
-    case mBTC: return QString("mALC");
-    case uBTC: return QString::fromUtf8("Î¼ALC");
+    case BTC: return QString("GLD");
+    case mBTC: return QString("mGLD");
+    case uBTC: return QString("uGLD");
     default: return QString("???");
     }
 }
@@ -49,9 +45,9 @@ QString BitcoinUnits::description(int unit)
 {
     switch(unit)
     {
-    case BTC: return QString("Adamantlegioncoins");
-    case mBTC: return QString("Milli-Adamantlegioncoins (1 / 1,000)");
-    case uBTC: return QString("Micro-Adamantlegioncoins (1 / 1,000,000)");
+    case BTC: return QString("GoldCoin (GLD)");
+    case mBTC: return QString("Milli-GoldCoins (mGLD) (1 / 1,000)");
+    case uBTC: return QString("Micro-GoldCoins (µGLD) (1 / 1,000,000)");
     default: return QString("???");
     }
 }
@@ -103,7 +99,7 @@ QString BitcoinUnits::format(int unit, qint64 n, bool fPlus)
     QString quotient_str = QString::number(quotient);
     QString remainder_str = QString::number(remainder).rightJustified(num_decimals, '0');
 
-    // Right-trim excess zeros after the decimal point
+    // Right-trim excess 0's after the decimal point
     int nTrim = 0;
     for (int i = remainder_str.size()-1; i>=2 && (remainder_str.at(i) == '0'); --i)
         ++nTrim;

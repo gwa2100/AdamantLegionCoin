@@ -1,7 +1,3 @@
-// Copyright (c) 2011-2013 The Bitcoin developers
-// Distributed under the MIT/X11 software license, see the accompanying
-// file COPYING or http://www.opensource.org/licenses/mit-license.php.
-
 #include "bitcoinaddressvalidator.h"
 
 /* Base58 characters are:
@@ -9,8 +5,8 @@
 
   This is:
   - All numbers except for '0'
-  - All upper-case letters except for 'I' and 'O'
-  - All lower-case letters except for 'l'
+  - All uppercase letters except for 'I' and 'O'
+  - All lowercase letters except for 'l'
 
   User friendly Base58 input can map
   - 'l' and 'I' to '1'

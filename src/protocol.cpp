@@ -1,5 +1,7 @@
 // Copyright (c) 2009-2010 Satoshi Nakamoto
 // Copyright (c) 2009-2012 The Bitcoin developers
+// Copyright (c) 2011-2012 Litecoin Developers
+// Copyright (c) 2013 GoldCoin (GLD) Developers
 // Distributed under the MIT/X11 software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
@@ -12,17 +14,58 @@
 # include <arpa/inet.h>
 #endif
 
+// The message start string is designed to be unlikely to occur in normal data.
+// The characters are rarely used upper ascii, not valid as UTF-8, and produce
+// a large 4-byte int at any alignment.
+
+// Public testnet message start
+// unsigned char pchMessageStartTestBitcoin[4] = { 0xfa, 0xbf, 0xb5, 0xda };
+//static unsigned char pchMessageStartTestOld[4] = { 0xdb, 0xe1, 0xf2, 0xf6 };
+//static unsigned char pchMessageStartTestNew[4] = { 0xcb, 0xf2, 0xc0, 0xef };
+//static unsigned int nMessageStartTestSwitchTime = 1346200000;
+
+// GoldCoin message start (switch from Litecoin's in v0.69)
+
+//static unsigned char pchMessageStartLiteCoin[4] = { 0xfb, 0xc0, 0xb6, 0xdb };
+
+//Kept for use in future Forks
+static unsigned char pchMessageStartLiteCoin[4] = { 0xfd, 0xc2, 0xb4, 0xdb };
+
+static unsigned char pchMessageStartGoldCoin[4] = { 0xfd, 0xc2, 0xb4, 0xdd };
+//static unsigned int nMessageStartSwitchTime = 1347300000;
+
+void GetMessageStart(unsigned char pchMessageStart[], bool fPersistent)
+{
+    /*if (fTestNet)
+        memcpy(pchMessageStart, (fPersistent || GetAdjustedTime() > nMessageStartTestSwitchTime)? pchMessageStartTestNew : pchMessageStartTestOld, sizeof(pchMessageStartTestNew));
+    else*/
+        memcpy(pchMessageStart, pchMessageStartGoldCoin, sizeof(pchMessageStartGoldCoin));
+}
+
+void GetMessageStart2(unsigned char pchMessageStart[])
+{
+	memcpy(pchMessageStart, pchMessageStartLiteCoin, sizeof(pchMessageStartGoldCoin));
+}
+
 static const char* ppszTypeName[] =
 {
     "ERROR",
     "tx",
     "block",
-    "filtered block"
 };
 
 CMessageHeader::CMessageHeader()
 {
-    memcpy(pchMessageStart, ::pchMessageStart, sizeof(pchMessageStart));
+	GetMessageStart(pchMessageStart);
+    memset(pchCommand, 0, sizeof(pchCommand));
+    pchCommand[1] = 1;
+    nMessageSize = -1;
+    nChecksum = 0;
+}
+
+CMessageHeader::CMessageHeader(bool meaninglessVar)
+{
+	//GetMessageStart2(pchMessageStart);
     memset(pchCommand, 0, sizeof(pchCommand));
     pchCommand[1] = 1;
     nMessageSize = -1;
@@ -31,7 +74,7 @@ CMessageHeader::CMessageHeader()
 
 CMessageHeader::CMessageHeader(const char* pszCommand, unsigned int nMessageSizeIn)
 {
-    memcpy(pchMessageStart, ::pchMessageStart, sizeof(pchMessageStart));
+    GetMessageStart(pchMessageStart);
     strncpy(pchCommand, pszCommand, COMMAND_SIZE);
     nMessageSize = nMessageSizeIn;
     nChecksum = 0;
@@ -47,9 +90,12 @@ std::string CMessageHeader::GetCommand() const
 
 bool CMessageHeader::IsValid() const
 {
-    // Check start string
-    if (memcmp(pchMessageStart, ::pchMessageStart, sizeof(pchMessageStart)) != 0)
-        return false;
+	// Check start string
+    unsigned char pchMessageStartProtocol[4];
+    GetMessageStart(pchMessageStartProtocol);
+    //if (memcmp(pchMessageStart, ::pchMessageStart, sizeof(pchMessageStart)) != 0 && memcmp(pchMessageStart2, ::pchMessageStart2, sizeof(pchMessageStart2)) != 0)
+    if (memcmp(pchMessageStart, pchMessageStartProtocol, sizeof(pchMessageStart)) != 0 && memcmp(pchMessageStart, pchMessageStartLiteCoin, sizeof(pchMessageStart)) != 0)
+		return false;
 
     // Check the command string for errors
     for (const char* p1 = pchCommand; p1 < pchCommand + COMMAND_SIZE; p1++)
@@ -142,7 +188,7 @@ const char* CInv::GetCommand() const
 
 std::string CInv::ToString() const
 {
-    return strprintf("%s %s", GetCommand(), hash.ToString().c_str());
+    return strprintf("%s %s", GetCommand(), hash.ToString().substr(0,20).c_str());
 }
 
 void CInv::print() const

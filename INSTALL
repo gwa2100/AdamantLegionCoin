@@ -1,9 +1,9 @@
-Building Adamantlegioncoin
+Building GLDCoin
 
-See doc/readme-qt.rst for instructions on building Adamantlegioncoin-Qt,
+See doc/readme-qt.rst for instructions on building GLDCoin-QT,
 the intended-for-end-users, nice-graphical-interface, reference
-implementation of Adamantlegioncoin.
+implementation of GLDCoin.
 
-See doc/build-*.txt for instructions on building adamantlegioncoind,
+See doc/build-*.txt for instructions on building gldcoind,
 the intended-for-services, no-graphical-interface, reference
-implementation of Adamantlegioncoin.
+implementation of GLDCoin.
